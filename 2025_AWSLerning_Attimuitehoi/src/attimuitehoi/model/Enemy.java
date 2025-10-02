@@ -3,7 +3,7 @@ package attimuitehoi.model;
 import java.util.Random;
 
 /**
- * 対戦相手の方向を決める・絵文字への変換を行うクラス
+ * 対戦相手の情報を持つクラス
  */
 public class Enemy {
 	Direction[] direction = Direction.values();

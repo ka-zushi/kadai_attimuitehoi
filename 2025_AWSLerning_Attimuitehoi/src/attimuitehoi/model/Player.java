@@ -3,7 +3,7 @@ package attimuitehoi.model;
 import java.util.Scanner;
 
 /**
- * プレイヤーの入力・絵文字への変換を行うクラス
+ * プレイヤーの情報を持つクラス
  */
 public class Player {
 	Direction[] direction = Direction.values();

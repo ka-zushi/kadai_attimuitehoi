@@ -3,7 +3,7 @@ package attimuitehoi.model;
 import java.util.Random;
 
 /**
- * 対戦相手の方向を決めるクラス
+ * 対戦相手の方向を決める・絵文字への変換を行うクラス
  */
 public class Enemy {
 	Direction[] direction = Direction.values();
@@ -11,60 +11,51 @@ public class Enemy {
 	private String enemyDisplay;
 
 	/**
-	 * @return enemyDirection
+	 * @return [enemyDirection] 対戦相手の方向(w.a.s.d)
 	 */
 	public Direction getEnemyDirection() {
 		return enemyDirection;
 	}
 
 	/**
-	 * @param direction セットする enemyDirection
+	 * @param direction Direction型の配列
 	 */
 	public void setEnemyDirection(Direction direction) {
 		this.enemyDirection = direction;
 	}
 
 	/**
-	 * @return [enemyDisplay] 
+	 * @return [enemyDisplay] 対戦相手の方向(↑,←,↓,→)
 	 */
 	public String getEnemyDisplay() {
 		return enemyDisplay;
 	}
 
 	/**
-	 * @param enemyDisplay セットする enemyDisplay
-	 */
-	public void setEnemyDisplay(String enemyDisplay) {
-		this.enemyDisplay = enemyDisplay;
-	}
-
-	/**
-	 * 対戦相手の方向をランダムに定義するメソッド
+	 * 対戦相手の方向をランダムで定義する
 	 */
 	public void inputEnemyDirection() {
-		//Randomクラスのインスタンス化
 		Random random = new Random();
-		//directionType[0～3]をランダムに定義
 		setEnemyDirection(direction[random.nextInt(4)]);
 	}
 
 	/**
-	 * 対戦相手の入力情報を
+	 * 対戦相手の方向を絵文字へ変換する
 	 */
 	public void changeEnemyDirection() {
 		switch (getEnemyDirection()) {
 		case w:
-			setEnemyDisplay(Direction.w.getDisplaySymbol());
-			return;
+			enemyDisplay = "↑";
+			break;
 		case a:
-			setEnemyDisplay(Direction.a.getDisplaySymbol());
-			return;
+			enemyDisplay = "←";
+			break;
 		case s:
-			setEnemyDisplay(Direction.s.getDisplaySymbol());
-			return;
+			enemyDisplay = "↓";
+			break;
 		case d:
-			setEnemyDisplay(Direction.d.getDisplaySymbol());
-			return;
+			enemyDisplay = "→";
+			break;
 		}
 	}
 

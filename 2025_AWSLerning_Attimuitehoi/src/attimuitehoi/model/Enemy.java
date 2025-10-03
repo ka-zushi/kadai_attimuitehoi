@@ -20,8 +20,8 @@ public class Enemy {
 	/**
 	 * @param direction Direction型の配列
 	 */
-	public void setEnemyDirection(Direction direction) {
-		this.enemyDirection = direction;
+	public void setEnemyDirection(Direction enemyDirection) {
+		this.enemyDirection = enemyDirection;
 	}
 
 	/**

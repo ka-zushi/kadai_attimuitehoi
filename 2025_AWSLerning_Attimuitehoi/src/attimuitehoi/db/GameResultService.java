@@ -5,13 +5,11 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.Logger;
 
 /**
  * ロジック（連勝記録や月ごとの成績の計算など）
  */
 public class GameResultService {
-	private static final Logger logger = Logger.getLogger(DbUtil.class.getName());
 
 	/**
 	 * 過去10回分の対戦結果を取得する
@@ -22,7 +20,7 @@ public class GameResultService {
 		try {
 			if (conn != null) {
 				Statement stmt = conn.createStatement();
-				String tenResultSql = "SELECT * FROM match_results ORDER BY ID DESC LIMIT 10;";
+				String tenResultSql = "SELECT * FROM match_history ORDER BY ID DESC LIMIT 10;";
 
 				ResultSet rs = stmt.executeQuery(tenResultSql);
 				System.out.println("過去10回分の対戦成績を表示します。");
@@ -66,7 +64,7 @@ public class GameResultService {
 				System.out.println("月ごとの対戦結果を表示します。");
 				System.out.println();
 
-				String resultMounth = "SELECT YEAR(MATCH_DATE) AS 年, MONTH(MATCH_DATE) AS 月, COUNT(*) AS 対戦回数,SUM(CASE WHEN RESULT = '勝利' THEN 1 ELSE 0 END) AS 勝利数 FROM match_results GROUP BY YEAR(MATCH_DATE), MONTH(MATCH_DATE) ORDER BY 年 DESC, 月 DESC;";
+				String resultMounth = "SELECT YEAR(MATCH_DATE) AS 年, MONTH(MATCH_DATE) AS 月, COUNT(*) AS 対戦回数,SUM(CASE WHEN RESULT = '勝利' THEN 1 ELSE 0 END) AS 勝利数 FROM match_history GROUP BY YEAR(MATCH_DATE), MONTH(MATCH_DATE) ORDER BY 年 DESC, 月 DESC;";
 				ResultSet rs = stmt.executeQuery(resultMounth);
 
 				while (rs.next()) {
@@ -104,7 +102,7 @@ public class GameResultService {
 				System.out.println("最多連勝記録を表示します。");
 				System.out.println("");
 
-				String sqlSelect = "select result from match_results ORDER BY MATCH_DATE ASC;";
+				String sqlSelect = "select result from match_history ORDER BY MATCH_DATE ASC;";
 				ResultSet rs = stmt.executeQuery(sqlSelect);
 
 				int winningStreak = 0;

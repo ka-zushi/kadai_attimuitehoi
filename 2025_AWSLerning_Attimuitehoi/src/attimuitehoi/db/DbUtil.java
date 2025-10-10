@@ -16,10 +16,13 @@ public class DbUtil {
 	private static String USERNAME;
 	private static String PASSWORD;
 
+	private static Properties properties = new Properties();
+
 	/**
-	 * Connectionを取得し、db接続を行う。
+	 * データーベース接続を行うメソッド
 	 * @return [conn] データベース接続用のConnectionオブジェクト(自動コミットはオフ)
 	 * @throws SQLException データベース接続に失敗した場合	
+	 * @throws ClassNotFoundException JDBCドライバのロードに失敗した場合
 	 */
 	public static Connection getConnection() throws SQLException {
 		init();
@@ -30,8 +33,8 @@ public class DbUtil {
 	}
 
 	/** 
-	 * トランザクションをコミットする
-	 * @param connection
+	 * トランザクションをコミットするメソッド
+	 * @param connection データベース接続用のConnectionオブジェクト
 	 * @throws SQLException コミット処理に失敗した場合
 	 */
 	public static void commit(Connection connection) throws SQLException {
@@ -41,7 +44,7 @@ public class DbUtil {
 	}
 
 	/**
-	 * データベース接続をクローズする。
+	 * データベース接続をクローズするメソッド
 	 * @param connection クローズするConnectionオブジェクト。nullの場合は何もしない。
 	 */
 	public static void close(Connection conn) {
@@ -55,7 +58,7 @@ public class DbUtil {
 	}
 
 	/**
-	 * トランザクションをロールバックする
+	 * トランザクションをロールバックするメソッド
 	 * @param connection
 	 */
 	public static void rollback(Connection connection) {
@@ -68,25 +71,23 @@ public class DbUtil {
 		}
 	}
 
-	public static void init() {
-		// プロパティファイルのパス
-		//String propertiesFilePath = "attimuitehoi/resources/db.properties";
-
-		// プロパティオブジェクトを作成
-		Properties properties = new Properties();
-
-		try (InputStream input = DbUtil.class.getClassLoader().getResourceAsStream("db.properties");) {
+	/**
+	 * プロパティファイルから設定を読み込むメソッド
+	 * @throws ClassNotFoundException 設定ファイルの読み込見に失敗した場合
+	 */
+	public static void init() throws SQLException {
+		try (InputStream input = DbUtil.class.getClassLoader().getResourceAsStream("db.properties")) {
 
 			// プロパティファイルを読み込む
 			properties.load(input);
-
 			// プロパティからデータベース接続情報を取得
 			URL = properties.getProperty("spring.datasource.url");
 			USERNAME = properties.getProperty("spring.datasource.username");
 			PASSWORD = properties.getProperty("spring.datasource.password");
 
 		} catch (IOException e) {
-			System.err.println("プロパティファイルの読み込みエラー: " + e.getMessage());
+			System.out.println("プロパティファイルの読み込みエラー: ");
 		}
+
 	}
 }

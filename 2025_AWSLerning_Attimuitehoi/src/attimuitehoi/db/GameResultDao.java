@@ -32,7 +32,7 @@ public class GameResultDao {
 				Date sqlDate = Date.valueOf(today); // SQL用の日付に変換
 
 				//対戦結果をテーブルに保存するINSERT文を作成
-				String insert = "INSERT INTO match_results (MATCH_DATE, ENEMY_DIRECTION, PLAYER_DIRECTION, RESULT) VALUES (?, ?, ?, ?)";
+				String insert = "INSERT INTO match_history (MATCH_DATE, ENEMY_DIRECTION, PLAYER_DIRECTION, RESULT) VALUES (?, ?, ?, ?)";
 
 				//ステートメントを生成
 				PreparedStatement pstmt = conn.prepareStatement(insert);

@@ -3,20 +3,23 @@ package attimuitehoi.db;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Logger;
 
 /**
  * ロジック（連勝記録や月ごとの成績の計算など）
  */
 public class GameResultService {
-	DbUtil dbUtil = new DbUtil();
+	private static final Logger logger = Logger.getLogger(DbUtil.class.getName());
 
 	/**
 	 * 過去10回分の対戦結果を取得する
+	 * @throws SQLException データベース接続に失敗した場合	
 	 */
-	public void getLast10Results() {
-		try (Connection conn = dbUtil.getConnection()) {
-
+	public void getLast10Results() throws SQLException {
+		Connection conn = DbUtil.getConnection();
+		try {
 			if (conn != null) {
 				Statement stmt = conn.createStatement();
 				String tenResultSql = "SELECT * FROM match_results ORDER BY ID DESC LIMIT 10;";
@@ -39,17 +42,23 @@ public class GameResultService {
 				if (dbCount > 10) {
 					System.out.println("過去にあっち向いてほいが" + dbCount + "回しか行われていませんでした。");
 				}
+				rs.close();
+				stmt.close();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			DbUtil.close(conn);
 		}
 	}
 
 	/**
 	 * 月ごとの対戦成績を表示
+	 * @throws SQLException データベース接続に失敗した場合	
 	 */
-	public void getMonthlyResults() {
-		try (Connection conn = dbUtil.getConnection()) {
+	public void getMonthlyResults() throws SQLException {
+		Connection conn = DbUtil.getConnection();
+		try {
 
 			if (conn != null) {
 				Statement stmt = conn.createStatement();
@@ -70,26 +79,31 @@ public class GameResultService {
 					System.out.println(playCount + "戦" + winTotal + "勝");
 					System.out.println();
 				}
+				rs.close();
+				stmt.close();
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			DbUtil.close(conn);
 		}
 
 	}
 
 	/**
 	 * 最多連勝記録を表示
+	 * @throws SQLException データベース接続に失敗した場合	
 	 */
-	public void getMaxWinningStreak() {
-		try (Connection conn = dbUtil.getConnection()) {
-
+	public void getMaxWinningStreak() throws SQLException {
+		Connection conn = DbUtil.getConnection();
+		try {
 			if (conn != null) {
 				Statement stmt = conn.createStatement();
-				
+
 				System.out.println("最多連勝記録を表示します。");
 				System.out.println("");
-				
+
 				String sqlSelect = "select result from match_results ORDER BY MATCH_DATE ASC;";
 				ResultSet rs = stmt.executeQuery(sqlSelect);
 
@@ -111,10 +125,13 @@ public class GameResultService {
 				}
 
 				System.out.println(maxStreak + " 連勝。");
+				rs.close();
+				stmt.close();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-
+		} finally {
+			DbUtil.close(conn);
 		}
 	}
 }

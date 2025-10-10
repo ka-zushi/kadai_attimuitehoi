@@ -3,6 +3,7 @@ package attimuitehoi.db;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.time.LocalDate;
 
 import attimuitehoi.management.Judge;
@@ -10,13 +11,21 @@ import attimuitehoi.model.Enemy;
 import attimuitehoi.model.Player;
 
 /**
- * DBへの保存・取得
+ * DBへの保存
  */
 public class GameResultDao {
-	DbUtil dbUtil = new DbUtil();
 
-	public void insertMatchResult(Player player, Enemy enemy, Judge judge) {
-		try (Connection conn = dbUtil.getConnection()) {
+	/**
+	 * テーブルに対戦結果をインサートする
+	 * @param player
+	 * @param enemy
+	 * @param judge
+	 * @throws SQLException データベース接続に失敗した場合	
+	 */
+	public void insertMatchResult(Player player, Enemy enemy, Judge judge) throws SQLException {
+
+		Connection conn = DbUtil.getConnection();
+		try {
 
 			if (conn != null) {
 				LocalDate today = LocalDate.now(); // 今日の日付（例: 2025-09-05）
@@ -32,13 +41,18 @@ public class GameResultDao {
 				pstmt.setString(3, player.getPlayerDisplay());
 				pstmt.setString(4, judge.getResult());
 
-				
 				int countRows = pstmt.executeUpdate();
 				System.out.println("テーブルに" + countRows + " 行が挿入されました");
 				System.out.println();
+				//commitを行う
+				DbUtil.commit(conn);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			//ロールバックを行う
+			DbUtil.rollback(conn);
+		} finally {
+			DbUtil.close(conn);
 		}
 
 	}

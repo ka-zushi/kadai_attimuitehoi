@@ -1,5 +1,6 @@
 package attimuitehoi.main;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 
 import attimuitehoi.db.GameResultDao;
@@ -14,7 +15,7 @@ import attimuitehoi.util.GameResultWriter;
  */
 public class GameLauncher {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws SQLException {
 
 		Player player = new Player();
 		Enemy enemy = new Enemy();

@@ -1,4 +1,4 @@
-package attimuitehoi.util;
+package com.awslearning.util;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -6,12 +6,12 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
 
-import attimuitehoi.management.Judge;
-import attimuitehoi.model.Enemy;
-import attimuitehoi.model.Player;
+import com.awslearning.model.Enemy;
+import com.awslearning.model.Judge;
+import com.awslearning.model.Player;
 
 /**
- * ファイル操作を行う
+ * ファイル操作に対するユーティリティークラス
  */
 public class GameResultWriter {
 

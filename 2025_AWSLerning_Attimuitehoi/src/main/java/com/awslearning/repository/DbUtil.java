@@ -1,4 +1,4 @@
-package attimuitehoi.db;
+package com.awslearning.repository;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 /**
- * データベース接続を管理するクラス
+ * データベース接続を管理するユーティリティークラス
  */
 public class DbUtil {
 

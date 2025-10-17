@@ -22,7 +22,6 @@ public class DbUtil {
 	 * データーベース接続を行うメソッド
 	 * @return [conn] データベース接続用のConnectionオブジェクト(自動コミットはオフ)
 	 * @throws SQLException データベース接続に失敗した場合	
-	 * @throws ClassNotFoundException JDBCドライバのロードに失敗した場合
 	 */
 	public static Connection getConnection() throws SQLException {
 		init();
@@ -59,7 +58,7 @@ public class DbUtil {
 
 	/**
 	 * トランザクションをロールバックするメソッド
-	 * @param connection
+	 * @param connection ロールバックするConnectionオブジェクト。nullの場合は何もしない。
 	 */
 	public static void rollback(Connection connection) {
 		if (connection != null) {
@@ -73,9 +72,8 @@ public class DbUtil {
 
 	/**
 	 * プロパティファイルから設定を読み込むメソッド
-	 * @throws ClassNotFoundException 設定ファイルの読み込見に失敗した場合
 	 */
-	public static void init() throws SQLException {
+	public static void init() {
 		try (InputStream input = DbUtil.class.getClassLoader().getResourceAsStream("db.properties")) {
 
 			// プロパティファイルを読み込む

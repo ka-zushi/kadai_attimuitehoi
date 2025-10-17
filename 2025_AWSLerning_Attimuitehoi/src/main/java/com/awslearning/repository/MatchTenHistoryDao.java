@@ -20,35 +20,34 @@ public class MatchTenHistoryDao {
 		// 取得した対戦履歴をリストに格納するため用意
 		List<MatchTenHistoryDto> matchTenList = new ArrayList<MatchTenHistoryDto>();
 
+		final String tenResultSql = "SELECT MATCH_DATE, RESULT FROM match_history ORDER BY ID DESC LIMIT 10;";
+
 		int count = 0;
 
 		try (Connection conn = DbUtil.getConnection()) {
 			if (conn != null) {
-				Statement stmt = conn.createStatement();
-				String tenResultSql = "SELECT * FROM match_history ORDER BY ID DESC LIMIT 10;";
+				try (Statement stmt = conn.createStatement();
+						ResultSet rs = stmt.executeQuery(tenResultSql);) {
 
-				ResultSet rs = stmt.executeQuery(tenResultSql);
-				while (rs.next()) {
-					
-					//MatchTenHistoryDtoをインスタンス化
-					MatchTenHistoryDto matchTenHistoryDto = new MatchTenHistoryDto();
-					
-					//抽出した対戦履歴をmatchTenHistoryDtoに一時格納
-					matchTenHistoryDto.setMatchDate(rs.getDate("MATCH_DATE"));
-					matchTenHistoryDto.setResult(rs.getString("RESULT"));
+					while (rs.next()) {
 
-					//一時格納したデータをmatchTenListに格納
-					matchTenList.add(matchTenHistoryDto);
-					
-					count++;
+						//MatchTenHistoryDtoをインスタンス化
+						MatchTenHistoryDto matchTenHistoryDto = new MatchTenHistoryDto();
+
+						//抽出した対戦履歴をmatchTenHistoryDtoに一時格納
+						matchTenHistoryDto.setMatchDate(rs.getDate("MATCH_DATE"));
+						matchTenHistoryDto.setResult(rs.getString("RESULT"));
+
+						//一時格納したデータをmatchTenListに格納
+						matchTenList.add(matchTenHistoryDto);
+
+						count++;
+					}
+
+					if (count > 10) {
+						System.out.println("過去にあっち向いてほいが" + count + "回しか行われていませんでした。");
+					}
 				}
-				
-				if (count > 10) {
-					System.out.println("過去にあっち向いてほいが" + count + "回しか行われていませんでした。");
-				}
-				
-				rs.close();
-				stmt.close();
 			}
 		}
 		return matchTenList;

@@ -22,6 +22,9 @@ public class HistoryService {
 	public void showMatchTenResult() throws SQLException {
 
 		MatchTenHistoryDao matchTenHistoryDao = new MatchTenHistoryDao();
+		
+		System.out.println("過去10回分の対戦結果を表示いたします。");
+		System.out.println();
 
 		//過去10回の対戦履歴が格納されたListを受け取る
 		List<MatchTenHistoryDto> tenResultList = matchTenHistoryDao.getMatchTenResults();

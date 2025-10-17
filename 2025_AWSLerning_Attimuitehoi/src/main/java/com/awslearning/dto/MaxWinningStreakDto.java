@@ -1,5 +1,9 @@
 package com.awslearning.dto;
 
+/**
+ * 
+ */
+
 public class MaxWinningStreakDto {
 
 	private String result;	//勝敗

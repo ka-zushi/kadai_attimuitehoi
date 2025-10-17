@@ -1,0 +1,31 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>jp.co.AWS-Lerning.nojima.db</groupId>
+  <artifactId>attimuitehoi_game</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>war</packaging>
+  
+  <dependencies>
+  	<dependency>
+  		<groupId>org.hsqldb</groupId>
+     	<artifactId>hsqldb</artifactId>
+    	<version>2.7.4</version>
+  	</dependency>
+  </dependencies>
+  
+<build>
+ <directory>target</directory>
+ <finalName>AttimuitehoiGame</finalName>
+  <sourceDirectory>src/attimuitehoi/main/java</sourceDirectory>
+  <plugins>
+    <plugin>
+      <artifactId>maven-compiler-plugin</artifactId>
+      <version>3.13.0</version>
+      <configuration>
+        <release>21</release>
+      </configuration>
+    </plugin>
+  </plugins>
+</build>
+
+</project>

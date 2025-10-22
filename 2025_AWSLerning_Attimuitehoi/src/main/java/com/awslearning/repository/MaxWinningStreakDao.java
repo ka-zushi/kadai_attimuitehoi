@@ -18,7 +18,7 @@ public class MaxWinningStreakDao {
 	 */
 	public List<MatchHistoryTbl> getMaxWinningStreak() throws SQLException {
 
-		final String sqlSelect = "select result from match_history;";
+		final String resultSelect = "select result from match_history;";
 
 		// 取得した勝敗をリストに格納するため用意
 		List<MatchHistoryTbl> maxWinningStreakList = new ArrayList<MatchHistoryTbl>();
@@ -26,10 +26,10 @@ public class MaxWinningStreakDao {
 		try (Connection conn = DbUtil.getConnection();) {
 
 			if (conn != null) {
-
+				//ステートメントの生成及び、ResultSetでresultSelectを実行した結果を格納
 				try (Statement stmt = conn.createStatement();
-						ResultSet rs = stmt.executeQuery(sqlSelect);) {
-
+						ResultSet rs = stmt.executeQuery(resultSelect);) {
+					//検索結果を1行ずつ読み取る
 					while (rs.next()) {
 						MatchHistoryTbl matchTenHistorytbl = new MatchHistoryTbl();
 

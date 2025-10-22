@@ -74,8 +74,8 @@ public class DbUtil {
 	 * プロパティファイルから設定を読み込むメソッド
 	 */
 	public static void init() {
-		try (InputStream input = DbUtil.class.getClassLoader().getResourceAsStream("db.properties")) {
 
+		try (InputStream input = DbUtil.class.getClassLoader().getResourceAsStream("db.properties")) {
 			// プロパティファイルを読み込む
 			properties.load(input);
 			// プロパティからデータベース接続情報を取得

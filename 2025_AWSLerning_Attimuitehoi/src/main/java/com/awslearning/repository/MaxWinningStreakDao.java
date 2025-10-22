@@ -7,7 +7,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.awslearning.dto.MaxWinningStreakDto;
+import com.awslearning.entity.MatchHistoryTbl;
 
 public class MaxWinningStreakDao {
 
@@ -16,34 +16,30 @@ public class MaxWinningStreakDao {
 	 * @return [maxWinningStreakList] 今までの勝敗が格納されているList
 	 * @throws SQLException データベース接続に失敗した場合	
 	 */
-	public List<MaxWinningStreakDto> getMaxWinningStreak() throws SQLException {
+	public List<MatchHistoryTbl> getMaxWinningStreak() throws SQLException {
+
+		final String sqlSelect = "select result from match_history;";
 
 		// 取得した勝敗をリストに格納するため用意
-		List<MaxWinningStreakDto> maxWinningStreakList = new ArrayList<MaxWinningStreakDto>();
+		List<MatchHistoryTbl> maxWinningStreakList = new ArrayList<MatchHistoryTbl>();
 
 		try (Connection conn = DbUtil.getConnection();) {
 
 			if (conn != null) {
 
-				//ステートメント作成
-				Statement stmt = conn.createStatement();
-				String sqlSelect = "select result from match_history ORDER BY MATCH_DATE ASC;";
+				try (Statement stmt = conn.createStatement();
+						ResultSet rs = stmt.executeQuery(sqlSelect);) {
 
-				//ステートメントを実行
-				ResultSet rs = stmt.executeQuery(sqlSelect);
+					while (rs.next()) {
+						MatchHistoryTbl matchTenHistorytbl = new MatchHistoryTbl();
 
-				while (rs.next()) {
-					MaxWinningStreakDto maxWinningStreakDto = new MaxWinningStreakDto();
+						//抽出した勝敗をmatchHistoryResultに一時格納
+						matchTenHistorytbl.setResult(rs.getString("RESULT"));
 
-					//抽出した勝敗をmaxWinningStreakDtoに一時格納
-					maxWinningStreakDto.setResult(rs.getString("RESULT"));
-
-					//一時格納したデータをmaxWinningStreakListに格納
-					maxWinningStreakList.add(maxWinningStreakDto);
+						//一時格納したデータをmaxWinningStreakListに格納
+						maxWinningStreakList.add(matchTenHistorytbl);
+					}
 				}
-
-				rs.close();
-				stmt.close();
 			}
 		}
 		return maxWinningStreakList;

@@ -10,6 +10,7 @@ import com.awslearning.service.AttimuitehoiService;
 public class GameLauncher {
 
 	public static void main(String[] args) throws SQLException {
+		
 		AttimuitehoiService attimuitehoi = new AttimuitehoiService();
 
 		attimuitehoi.startAttimuitehoi();

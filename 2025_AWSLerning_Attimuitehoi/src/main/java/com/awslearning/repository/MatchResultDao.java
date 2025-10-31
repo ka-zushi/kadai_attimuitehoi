@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 import com.awslearning.model.Enemy;
 import com.awslearning.model.Judge;
@@ -26,35 +27,40 @@ public class MatchResultDao {
 	 */
 	public void insertMatchResult(Player player, Enemy enemy, Judge judge) throws SQLException {
 
+		//DbUtil.getConnection();を使用し、オートコミットモードをオフでコネクションの取得を行う。
 		Connection conn = DbUtil.getConnection();
 
-		int countRows = 0;
+		//対戦結果をテーブルに保存するINSERT文
+		final String insert = "INSERT INTO match_history (MATCH_DATE, MATCH_TIME, ENEMY_DIRECTION, PLAYER_DIRECTION, RESULT) VALUES (?, ?, ?, ?, ?)";
 
 		try {
 
 			if (conn != null) {
-				LocalDate today = LocalDate.now(); // 今日の日付（例: 2025-09-05）
-				Date sqlDate = Date.valueOf(today); // SQL用の日付に変換
-
-				//対戦結果をテーブルに保存するINSERT文を作成
-				String insert = "INSERT INTO match_history (MATCH_DATE, ENEMY_DIRECTION, PLAYER_DIRECTION, RESULT) VALUES (?, ?, ?, ?)";
-
 				//ステートメントを生成
-				PreparedStatement pstmt = conn.prepareStatement(insert);
+				try (PreparedStatement pstmt = conn.prepareStatement(insert);) {
+					LocalDate today = LocalDate.now(); // 今日の日付（例: 2025-09-05）
+					Date sqlDate = Date.valueOf(today); // SQL用の日付に変換
+					LocalTime now = LocalTime.now(); //現在の時刻
 
-				pstmt.setDate(1, sqlDate);
-				pstmt.setString(2, enemy.getEnemyDisplay());
-				pstmt.setString(3, player.getPlayerDisplay());
-				pstmt.setString(4, judge.getResult());
+					//カラムに各項目を指定
+					pstmt.setDate(1, sqlDate);
+					pstmt.setObject(2, now);
+					pstmt.setString(3, enemy.getEnemyDisplay());
+					pstmt.setString(4, player.getPlayerDisplay());
+					pstmt.setString(5, judge.getResult());
 
-				//更新を行った行数をcountRowsに格納
-				countRows = pstmt.executeUpdate();
+					//ステートメントの実行
+					pstmt.executeUpdate();
 
-				System.out.println("テーブルに" + countRows + " 行が挿入されました");
-				System.out.println();
+					System.out.println();
+					System.out.println("DBに対戦情報を保存しました");
 
-				//commitを行う
-				DbUtil.commit(conn);
+					//ステートメントを閉じる
+					pstmt.close();
+
+					//commitを行う
+					DbUtil.commit(conn);
+				}
 			}
 		} catch (Exception e) {
 			//ロールバックを行う

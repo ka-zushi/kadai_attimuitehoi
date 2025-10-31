@@ -106,10 +106,10 @@ public class AttimuitehoiService {
 			enemy.setEnemyDisplay("←");
 			break;
 		case s:
-			enemy.setEnemyDisplay("←");
+			enemy.setEnemyDisplay("↓");
 			break;
 		case d:
-			enemy.setEnemyDisplay("←");
+			enemy.setEnemyDisplay("→");
 			break;
 		}
 	}

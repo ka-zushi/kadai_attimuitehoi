@@ -7,45 +7,46 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.awslearning.dto.MatchTenHistoryDto;
+import com.awslearning.entity.MatchHistoryTbl;
 
 public class MatchTenHistoryDao {
 	/**
-	 * * 過去10回分の対戦結果をsql文で抽出し、結果をListに格納するメソッド
+	 * 過去10回分の対戦結果をsql文で抽出し、結果をListに格納するメソッド
 	 * @return [matchTenList] 過去10回の対戦履歴をリストに格納したもの。
 	 * @throws SQLException データベース接続に失敗した場合	
 	 */
-	public List<MatchTenHistoryDto> getMatchTenResults() throws SQLException {
+	public List<MatchHistoryTbl> getMatchTenResults() throws SQLException {
 
 		// 取得した対戦履歴をリストに格納するため用意
-		List<MatchTenHistoryDto> matchTenList = new ArrayList<MatchTenHistoryDto>();
+		List<MatchHistoryTbl> matchTenList = new ArrayList<MatchHistoryTbl>();
 
-		final String tenResultSql = "SELECT MATCH_DATE, RESULT FROM match_history ORDER BY ID DESC LIMIT 10;";
+		final String tenResultSql = "SELECT MATCH_DATE, MATCH_TIME, RESULT FROM match_history ORDER BY ID DESC LIMIT 10;";
 
-		int count = 0;
-
+		//コネクションの取得
 		try (Connection conn = DbUtil.getConnection()) {
 			if (conn != null) {
+				//ステートメントの生成及び、ResultSetでtenResultSqlを実行した結果を格納
 				try (Statement stmt = conn.createStatement();
 						ResultSet rs = stmt.executeQuery(tenResultSql);) {
 
+					//検索結果を1行ずつ読み取る
 					while (rs.next()) {
 
 						//MatchTenHistoryDtoをインスタンス化
-						MatchTenHistoryDto matchTenHistoryDto = new MatchTenHistoryDto();
+						MatchHistoryTbl matchTenHistorytbl = new MatchHistoryTbl();
 
-						//抽出した対戦履歴をmatchTenHistoryDtoに一時格納
-						matchTenHistoryDto.setMatchDate(rs.getDate("MATCH_DATE"));
-						matchTenHistoryDto.setResult(rs.getString("RESULT"));
+						//抽出した対戦履歴をMatchHistoryTblに一時格納
+						matchTenHistorytbl.setMatchDate(rs.getDate("MATCH_DATE"));
+						matchTenHistorytbl.setMatchTime(rs.getTime("MATCH_TIME"));
+						matchTenHistorytbl.setResult(rs.getString("RESULT"));
 
 						//一時格納したデータをmatchTenListに格納
-						matchTenList.add(matchTenHistoryDto);
+						matchTenList.add(matchTenHistorytbl);
 
-						count++;
 					}
 
-					if (count > 10) {
-						System.out.println("過去にあっち向いてほいが" + count + "回しか行われていませんでした。");
+					if (matchTenList.size() < 10) {
+						System.out.println("過去にあっち向いてほいが" + matchTenList.size() + "回しか行われていませんでした。");
 					}
 				}
 			}

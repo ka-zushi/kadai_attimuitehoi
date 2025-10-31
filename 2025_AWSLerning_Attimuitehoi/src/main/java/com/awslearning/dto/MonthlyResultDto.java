@@ -7,8 +7,8 @@ public class MonthlyResultDto {
 
 	private int year; //対戦年
 	private int month; //対戦月
-	private int playCount; //対戦回数
-	private int winTotal; //勝利数
+	private int playCount; //月ごとの対戦回数
+	private int winTotal; //月ごとの勝利数
 
 	public int getYear() {
 		return year;

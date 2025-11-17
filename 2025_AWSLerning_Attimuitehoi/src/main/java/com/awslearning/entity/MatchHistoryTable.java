@@ -3,7 +3,7 @@ package com.awslearning.entity;
 import java.sql.Date;
 import java.sql.Time;
 
-public class MatchHistoryTbl {
+public class MatchHistoryTable {
 	/**
 	 * あっちむいてほいの履歴テーブルのエンティティクラス
 	 */

@@ -7,7 +7,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.awslearning.entity.MatchHistoryTbl;
+import com.awslearning.entity.MatchHistoryTable;
 
 public class MatchTenHistoryDao {
 	/**
@@ -15,16 +15,15 @@ public class MatchTenHistoryDao {
 	 * @return [matchTenList] 過去10回の対戦履歴をリストに格納したもの。
 	 * @throws SQLException データベース接続に失敗した場合	
 	 */
-	public List<MatchHistoryTbl> getMatchTenResults() throws SQLException {
+	public List<MatchHistoryTable> getMatchTenResults() throws SQLException {
 
 		// 取得した対戦履歴をリストに格納するため用意
-		List<MatchHistoryTbl> matchTenList = new ArrayList<MatchHistoryTbl>();
+		List<MatchHistoryTable> matchTenList = new ArrayList<MatchHistoryTable>();
 
-		final String tenResultSql = "SELECT MATCH_DATE, MATCH_TIME, RESULT FROM match_history ORDER BY ID DESC LIMIT 10;";
+		final String tenResultSql = "SELECT MATCH_DATE, MATCH_TIME, RESULT FROM match_history ORDER BY MATCH_DATE DESC LIMIT 10;";
 
 		//コネクションの取得
 		try (Connection conn = DbUtil.getConnection()) {
-			if (conn != null) {
 				//ステートメントの生成及び、ResultSetでtenResultSqlを実行した結果を格納
 				try (Statement stmt = conn.createStatement();
 						ResultSet rs = stmt.executeQuery(tenResultSql);) {
@@ -33,7 +32,7 @@ public class MatchTenHistoryDao {
 					while (rs.next()) {
 
 						//MatchTenHistoryDtoをインスタンス化
-						MatchHistoryTbl matchTenHistorytbl = new MatchHistoryTbl();
+						MatchHistoryTable matchTenHistorytbl = new MatchHistoryTable();
 
 						//抽出した対戦履歴をMatchHistoryTblに一時格納
 						matchTenHistorytbl.setMatchDate(rs.getDate("MATCH_DATE"));
@@ -44,13 +43,8 @@ public class MatchTenHistoryDao {
 						matchTenList.add(matchTenHistorytbl);
 
 					}
-
-					if (matchTenList.size() < 10) {
-						System.out.println("過去にあっち向いてほいが" + matchTenList.size() + "回しか行われていませんでした。");
-					}
 				}
 			}
-		}
 		return matchTenList;
 	}
 }

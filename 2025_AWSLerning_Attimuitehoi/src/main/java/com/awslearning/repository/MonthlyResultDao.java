@@ -17,14 +17,12 @@ public class MonthlyResultDao {
 	 */
 	public List<MonthlyResultDto> getMonthlyResults() throws SQLException {
 
-		final String MounthlyResult = "SELECT YEAR(MATCH_DATE) AS 年, MONTH(MATCH_DATE) AS 月, COUNT(*) AS 対戦回数,SUM(CASE WHEN RESULT = '勝利' THEN 1 ELSE 0 END) AS 勝利数 FROM match_history GROUP BY YEAR(MATCH_DATE), MONTH(MATCH_DATE);";
+		final String MounthlyResult = "SELECT YEAR(MATCH_DATE) AS 年, MONTH(MATCH_DATE) AS 月, COUNT(*) AS 対戦回数,SUM(CASE WHEN RESULT = '勝利' THEN 1 ELSE 0 END) AS 勝利数 FROM match_history GROUP BY YEAR(MATCH_DATE), MONTH(MATCH_DATE) ORDER BY YEAR(MATCH_DATE), MONTH(MATCH_DATE) DESC";
 
 		// 取得した対戦履歴をリストに格納するため用意
 		List<MonthlyResultDto> monthlyResuktList = new ArrayList<MonthlyResultDto>();
 
-		try (Connection conn = DbUtil.getConnection();) {
-
-			if (conn != null) {
+		try (Connection conn = DbUtil.getConnection()) {
 				//ステートメントの生成及び、ResultSetでresultMounthを実行した結果を格納
 				try (Statement stmt = conn.createStatement();
 						ResultSet rs = stmt.executeQuery(MounthlyResult);) {
@@ -46,4 +44,3 @@ public class MonthlyResultDao {
 			return monthlyResuktList;
 		}
 	}
-}

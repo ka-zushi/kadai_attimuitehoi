@@ -5,6 +5,9 @@ import java.time.LocalDate;
 import java.util.Random;
 import java.util.Scanner;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.awslearning.model.Direction;
 import com.awslearning.model.Enemy;
 import com.awslearning.model.Judge;
@@ -25,6 +28,8 @@ public class AttimuitehoiService {
 	Enemy enemy = new Enemy();
 	Player player = new Player();
 	Judge judge = new Judge();
+	
+	private static final Logger logger = LogManager.getLogger(AttimuitehoiService.class);
 
 	/**
 	 * あっちむいてほいを行うメソッド
@@ -33,8 +38,8 @@ public class AttimuitehoiService {
 	public void startAttimuitehoi() throws SQLException {
 		boolean playAgainFlag = true;
 
-		System.out.println("日付: " + localDate);
-		System.out.println("あっちむいてほいを行います!");
+		logger.info("日付: " + localDate);
+		logger.info("あっちむいてほいを行います!");
 		System.out.println();
 
 		while (playAgainFlag) {
@@ -49,10 +54,10 @@ public class AttimuitehoiService {
 
 			//コンソールに出力
 			System.out.println(); //空白
-			System.out.println("「あっち向いてほいっ！」");
-			System.out.println("相手: " + enemy.getEnemyDisplay());
-			System.out.println("あなた: " + player.getPlayerDisplay());
-			System.out.println("結果:" + judge.getResult());
+			logger.info("「あっち向いてほいっ！」");
+			logger.info("相手: " + enemy.getEnemyDisplay());
+			logger.info("あなた: " + player.getPlayerDisplay());
+			logger.info("結果:" + judge.getResult());
 			System.out.println();
 
 			//ファイルに対戦情報の書き込みを行う
@@ -72,17 +77,17 @@ public class AttimuitehoiService {
 
 			//対戦を終了するかを選択
 			System.out.println();
-			System.out.println("続けて対戦を行う場合は「y」を入力してください。");
+			logger.info("続けて対戦を行う場合は「y」を入力してください。");
 
 			String inputPlayAgain = scanner.nextLine();
 
 			if (inputPlayAgain.equals("y")) {
 				System.out.println();
-				System.out.println("続けて対戦を行います。");
+				logger.info("続けて対戦を行います。");
 				System.out.println();
 			} else {
 				System.out.println();
-				System.out.println("「y」以外が入力されたのであっちむいてほいを終了します。");
+				logger.info("「y」以外が入力されたのであっちむいてほいを終了します。");
 				playAgainFlag = false;
 			}
 		}

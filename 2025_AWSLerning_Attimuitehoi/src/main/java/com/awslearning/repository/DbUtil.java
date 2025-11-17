@@ -7,11 +7,16 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  * データベース接続を管理するユーティリティークラス
  */
 public class DbUtil {
 
+	private static final Logger logger = LogManager.getLogger(DbUtil.class);
+	
 	private static String URL;
 	private static String USERNAME;
 	private static String PASSWORD;
@@ -36,10 +41,8 @@ public class DbUtil {
 	 * @param connection データベース接続用のConnectionオブジェクト
 	 * @throws SQLException コミット処理に失敗した場合
 	 */
-	public static void commit(Connection connection) throws SQLException {
-		if (connection != null) {
-			connection.commit();
-		}
+	public static void commit(Connection conn) throws SQLException {
+			conn.commit();
 	}
 
 	/**
@@ -47,28 +50,24 @@ public class DbUtil {
 	 * @param connection クローズするConnectionオブジェクト。nullの場合は何もしない。
 	 */
 	public static void close(Connection conn) {
-		if (conn != null) {
 			try {
 				conn.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
-	}
 
 	/**
 	 * トランザクションをロールバックするメソッド
 	 * @param connection ロールバックするConnectionオブジェクト。nullの場合は何もしない。
 	 */
-	public static void rollback(Connection connection) {
-		if (connection != null) {
+	public static void rollback(Connection conn) {
 			try {
-				connection.rollback();
+				conn.rollback();
 			} catch (SQLException e) {
-				System.out.println("ロールバックに失敗しました: " + e.getMessage());
+				logger.error("ロールバックに失敗しました: ");
 			}
 		}
-	}
 
 	/**
 	 * プロパティファイルから設定を読み込むメソッド
@@ -84,7 +83,7 @@ public class DbUtil {
 			PASSWORD = properties.getProperty("spring.datasource.password");
 
 		} catch (IOException e) {
-			System.out.println("プロパティファイルの読み込みエラー: ");
+			logger.error("プロパティファイルの読み込みエラー: ");
 		}
 
 	}

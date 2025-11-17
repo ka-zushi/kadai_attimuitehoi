@@ -7,6 +7,9 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.awslearning.model.Enemy;
 import com.awslearning.model.Judge;
 import com.awslearning.model.Player;
@@ -15,8 +18,9 @@ import com.awslearning.model.Player;
  * DBへの保存を行うクラス
  */
 public class MatchResultDao {
-	// 取得した対戦履歴をリストに格納するため用意
-
+	
+	private static final Logger logger = LogManager.getLogger(DbUtil.class);
+	
 	/**
 	 * テーブルに対戦結果をインサートする
 	 * @return [countRows] INSERTを行った行数
@@ -33,9 +37,6 @@ public class MatchResultDao {
 		//対戦結果をテーブルに保存するINSERT文
 		final String insert = "INSERT INTO match_history (MATCH_DATE, MATCH_TIME, ENEMY_DIRECTION, PLAYER_DIRECTION, RESULT) VALUES (?, ?, ?, ?, ?)";
 
-		try {
-
-			if (conn != null) {
 				//ステートメントを生成
 				try (PreparedStatement pstmt = conn.prepareStatement(insert);) {
 					LocalDate today = LocalDate.now(); // 今日の日付（例: 2025-09-05）
@@ -53,15 +54,14 @@ public class MatchResultDao {
 					pstmt.executeUpdate();
 
 					System.out.println();
-					System.out.println("DBに対戦情報を保存しました");
+					logger.info("DBに対戦情報を保存しました");
 
 					//ステートメントを閉じる
 					pstmt.close();
 
 					//commitを行う
 					DbUtil.commit(conn);
-				}
-			}
+	
 		} catch (Exception e) {
 			//ロールバックを行う
 			DbUtil.rollback(conn);
